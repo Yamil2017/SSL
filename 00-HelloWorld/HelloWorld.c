@@ -4,11 +4,7 @@
 
 int main()
 {
-	FILE* archivo;
-	archivo = fopen("output.txt", "w");
-
-	fprintf(archivo,"Hello World!");
-	fclose(archivo);
-
+	printf("Hello world!\n");
+	system("pause");
 	return 0;
 }
