@@ -1,0 +1,16 @@
+Esto es una prueba
+otra linea //comentario
+//otro comentario
+con /*nada menos que
+tres linea
+
+cinco*/ final...
+//another comment
+
+and the rest
+
+/*comentario multilinea
+que se alrga
+por tres lineas*/ entendido
+
+eso espero

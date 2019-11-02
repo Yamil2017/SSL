@@ -1,0 +1,9 @@
+digraph RemoveComments{
+	INICIO -> PC[label="/"] 
+	PC -> INS[label="/"] //PC:Posible Comentario INS:Dentro de comentario simple
+	PC -> INM[label="*"] //INM:Dentro de comentario multilinea
+	INM -> PFM[label="*"] //PFM:Posible fin de comentario multilinea
+	PFM -> FCM[label="/"]	//FCM:Fin de comentario multilinea
+	INS -> FCS[label="\\n"]	//FCS:Fin de comentario simple
+	PFM -> INM[label="eoc"]
+}
