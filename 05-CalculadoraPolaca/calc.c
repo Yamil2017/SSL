@@ -5,13 +5,15 @@
 #include"Scanner.h"
 
 int main(){
+	FILE* archivo = fopen("expresiones","r");
 	Token token;
 	TokenType tipoToken;
-	TokenValue minuendo,denominador;
-	int aux;
-	while((aux=getch())!=EOF && aux!='\n'){
+	TokenValue sustraendo,numerador;
+	int aux=0;
+
+	while((aux=getch(archivo))!=EOF){ //&& aux!='\n'){
 		ungetch(aux);
-		while(getNextToken(&token)){
+		while(getNextToken(&token,archivo)){
 			tipoToken=token.type;
 			switch(tipoToken){
 			case Number:
@@ -24,19 +26,26 @@ int main(){
 				push(pop()*pop());
 				break;
 			case Substraction:
-				minuendo = pop();
-				push(minuendo-pop());
+				sustraendo = pop();
+				push(pop()-sustraendo);
 				break;
 			case Division:
-				denominador = pop();
-				push(denominador/pop());
+				numerador = pop();
+				if(numerador!=0.0)
+					push(pop()/numerador);
+				else
+					printf("Division por cero!\n");
+				break;
+			case PopResult:
+				printf("El resultado es %f\n", pop());
 				break;
 			default:
 				printf("something's gone wrong, terribly terribly wrong....");
+				exit(0);
 			}
 		}
 	}
-	printf("the result of the expression is = %f\n",pop());
+	//printf("the result of the expression is = %f\n",pop());
 
 	/* prueba de la pila
 	srand(time(0));

@@ -2,6 +2,7 @@
 #define SCANNER_H
 
 #include <stdbool.h>
+#include <stdio.h>
 
 enum TokenType{
 	Number,
@@ -22,8 +23,8 @@ typedef struct Token{
 	TokenValue val;
 } Token;
 
-bool getNextToken(Token*);
-int getch();
+bool getNextToken(Token*,FILE*);
+int getch(FILE*);
 void ungetch(int);
 TokenType getOperator(int);
 //TokenValue getOperatorValue(int);
