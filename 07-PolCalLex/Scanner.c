@@ -3,36 +3,26 @@
 #include<stdlib.h>
 #define MAXSIZE 50
 
+extern int yylex();
+//extern int yylineno;
+extern char* yytext;
+extern FILE* yyin;
 //const int MAXSIZE = 50; //variably modified 's'/'buf' at file scope error
 char s[MAXSIZE];
 char buf[MAXSIZE];//buffer for ungetch
 int bufp = 0;//next free position in buf
 
-
 bool getNextToken (Token *t,FILE* archivo){
-	int i,lexeme;
-	while((s[0]=lexeme=getch(archivo))==' '||lexeme=='\t')
-		;
-	if(!isdigit(lexeme) && lexeme!='.'){ //Not a number
-		//if(c==EOF)return false;
-		t->val= lexeme;
-		t->type=getOperator(lexeme);
+	yyin = archivo;
+	int ntoken=yylex();
+
+	if(ntoken){
+		t->type=ntoken;
+		t->val=atof(yytext);
 		return true;
 	}
-	i=0;
-	if(isdigit(lexeme)){ //collect integer part
-		while(isdigit(s[++i]=lexeme=getch(archivo)))
-			;
-	}
-	if(lexeme=='.') //collect fraction part
-		while(isdigit(s[++i]=lexeme=getch(archivo)))
-			;
-	s[i]='\0';
-	t->type=Number;
-	t->val=atof(s);
-	if(lexeme!=EOF)
-		ungetch(lexeme);
-	return true;
+	else
+		return false;
 }
 
 int getch(FILE* archivo){
