@@ -8,9 +8,9 @@
 [/]				return Division;
 [+]				return Addition;
 [-]				return Substraction;
-[1-9][0-9]*		return Number;
-[\n]			return PopResult;
-[ \t]			return ;
+[1-9][0-9]*			return Number;
+[\n]				return PopResult;
+[ \t]				return ;
 .				return LexError;
 
 %%
