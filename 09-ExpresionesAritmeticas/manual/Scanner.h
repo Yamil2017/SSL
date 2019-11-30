@@ -10,6 +10,8 @@ enum TokenType{
 	Multiplication='*',
 	Substraction='-',
 	Division='/',
+	Lparens='(',
+	Rparens=')',
 	PopResult='\n',
 	LexError
 };
@@ -23,8 +25,8 @@ typedef struct Token{
 	TokenValue val;
 } Token;
 
-bool getNextToken(Token*,FILE*);
-int getch(FILE*);
+bool getNextToken(Token*);
+int getch();
 void ungetch(int);
 TokenType getOperator(int);
 //TokenValue getOperatorValue(int);

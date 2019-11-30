@@ -8,11 +8,11 @@
 #define MAXBUFS 100
 
 int sps = PILA_VACIA_S;
-Tokentype pila[MAXBUFS];
+TokenType pila[MAXBUFS];
 
-const TokenType pops();
+TokenType pops();
 void pushs(const TokenType);
-bool estavacias();
+bool estaVacias();
 bool estaLlenas();
 void operate(TokenType,const TokenValue);
 
@@ -22,35 +22,70 @@ int main(){
 	TokenType tipoToken;
 	TokenValue sustraendo,numerador;
 	int aux=0;
-		
+	TokenType lastState;
+	TokenType beforeLastState;
 
-	while((aux=getchar())){ 
-		while(getNextToken(&token)){
-			tipoToken=token.type;
-			switch(tipoToken){
-			case Number:
-				const TokenType lastState = pops();
-				if(lastState==Addition||lastState==Substraction||lastState==Division||lastState==Multiplication)
-					push(operate(lastState,token.val);					
+	while(getNextToken(&token)){
+		tipoToken=token.type;
+		switch(tipoToken){
+		case Number:
+			if(!estaVacias()){
+				lastState = pops();
+				if(lastState==Addition||lastState==Substraction||lastState==Division||lastState==Multiplication){
+					beforeLastState = pops();
+					if(beforeLastState==Number){
+						operate(lastState,token.val);
+						pushs(Number);
+					}
+					else{
+						pushs(beforeLastState);
+						pushs(lastState);
+						pushs(Number);
+						push(token.val);
+					}
+				}
+				else if(lastState==Lparens){
+					pushs(lastState);
+					push(token.val);
+				}	
 				else {
 					printf("Se esperaba un operador\n");
 					exit(0);
 				}
-				break;
-			case LPARENS
-			case PopResult:
-				printf("El resultado es %f\n", pop());
-				break;
-			default:
-				printf("something's gone wrong, terribly terribly wrong....");
-				exit(0);
 			}
+			else{
+				pushs(tipoToken);
+				push(token.val);
+			}	
+			break;
+		case Lparens:case Addition:case Multiplication:case Division:case Substraction:
+			pushs(tipoToken);
+			break;
+		case Rparens:
+			lastState=pops();
+			if(lastState==Number){
+				pops();
+				pushs(lastState);
+			}else{
+				printf("Error sintactico\n");
+				exit(0);
+			}	
+			break;
+		case PopResult:
+			printf("El resultado es %f\n", pop());
+			break;
+		default:
+			printf("something's gone wrong, terribly terribly wrong....");
+			exit(0);
 		}
 	}
 
+	return 0;
+}
+
 void operate(TokenType operator,const TokenValue valor){
 
-	select(operator){
+	switch(operator){
 		case Addition:
 			push(pop()+valor);
 			break;
@@ -71,9 +106,9 @@ void operate(TokenType operator,const TokenValue valor){
 	}
 }
 
-const TokenType pops(){
+TokenType pops(){
 	if(sps==PILA_VACIA_S){
-		printf("no hay nada que popear\n");
+		printf("no hay estado que popear\n");
 		exit(0);
 	}
 	return pila[sps--];
@@ -87,12 +122,7 @@ void pushs(const TokenType elemento){
 	pila[++sps] = elemento;
 }
 
-bool estaVacias(){ return sps==PILA_VACIA; }
+bool estaVacias(){ return sps==PILA_VACIA_S; }
 
-bool estaLlenas() { return sps==MAXBUF-1; }
+bool estaLlenas() { return sps==MAXBUFS-1; }
 
-
-
-
-	return 0;
-}

@@ -9,23 +9,28 @@ char buf[MAXSIZE];//buffer for ungetch
 int bufp = 0;//next free position in buf
 
 
-bool getNextToken (Token *t,FILE* archivo){
+bool getNextToken (Token *t){
 	int i,lexeme;
-	while((s[0]=lexeme=getch(archivo))==' '||lexeme=='\t')
+	while((s[0]=lexeme=getch())==' '||lexeme=='\t')
 		;
 	if(!isdigit(lexeme) && lexeme!='.'){ //Not a number
-		//if(c==EOF)return false;
-		t->val= lexeme;
-		t->type=getOperator(lexeme);
-		return true;
+		if(lexeme=='+'||lexeme=='/'||lexeme=='-'||lexeme=='*'){
+			t->val= lexeme;
+			t->type=getOperator(lexeme);
+			return true;
+		}
+		else {
+			printf("caracter no reconocido\n");
+			return false;
+		}
 	}
 	i=0;
 	if(isdigit(lexeme)){ //collect integer part
-		while(isdigit(s[++i]=lexeme=getch(archivo)))
+		while(isdigit(s[++i]=lexeme=getch()))
 			;
 	}
 	if(lexeme=='.') //collect fraction part
-		while(isdigit(s[++i]=lexeme=getch(archivo)))
+		while(isdigit(s[++i]=lexeme=getch()))
 			;
 	s[i]='\0';
 	t->type=Number;
@@ -35,8 +40,8 @@ bool getNextToken (Token *t,FILE* archivo){
 	return true;
 }
 
-int getch(FILE* archivo){
-	return(bufp>0)?buf[--bufp]:getc(archivo);//getchar();
+int getch(){
+	return (bufp>0)?buf[--bufp]:getchar();
 }
 
 void ungetch(int c){
