@@ -3,7 +3,7 @@
 #include<string.h>
 #include"binaryTree.h"
 
-NodeTree* addtree(NodeTree* tree,char* word){
+NodeTree* addtree(NodeTree* tree, char* word){
     int cond;
 
     if(tree==NULL){ //non-existing word within tree
